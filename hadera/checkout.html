@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout — HADÉRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(2rem, 5vw, 3.5rem);
+      align-items: start;
+    }
+
+    .summary-card {
+      background: var(--color-bg-raised);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-l);
+      padding: 1.6rem;
+      position: sticky;
+      top: 90px;
+    }
+
+    .summary-product {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--color-line);
+      margin-bottom: 1.2rem;
+    }
+
+    .summary-product img {
+      width: 76px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: var(--radius-s);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      padding-block: 0.4rem;
+      color: var(--color-ink-soft);
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding-top: 1rem;
+      margin-top: 0.6rem;
+      border-top: 1px solid var(--color-line);
+    }
+
+    @media (max-width: 880px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="site-header"></div>
+
+  <main>
+    <div class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / Checkout</div>
+        <span class="eyebrow">Step 2 of 3</span>
+        <h1>Complete your order</h1>
+        <p>Fill in your delivery details below — payment is handled securely on the next step.</p>
+      </div>
+    </div>
+
+    <div class="section" id="checkout-root">
+      <div class="container checkout-layout">
+        <form id="checkout-form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="fullName">Full name</label>
+              <input type="text" id="fullName" name="fullName" required>
+              <span class="field-error-msg">Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+              <span class="field-error-msg">Please enter a valid email address.</span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input type="tel" id="phone" name="phone" required>
+              <span class="field-error-msg">Please enter a valid phone number.</span>
+            </div>
+            <div class="field">
+              <label for="whatsapp">WhatsApp number</label>
+              <input type="tel" id="whatsapp" name="whatsapp">
+              <span class="hint">Optional, if different from phone</span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="state">State</label>
+              <select id="state" name="state" required>
+                <option value="">Select state</option>
+                <option>FCT — Abuja</option>
+                <option>Lagos</option>
+                <option>Rivers</option>
+                <option>Kano</option>
+                <option>Oyo</option>
+              </select>
+              <span class="field-error-msg">Please select your state.</span>
+            </div>
+            <div class="field">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" required>
+              <span class="field-error-msg">Please enter your city.</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="address">Delivery address</label>
+            <textarea id="address" name="address" required></textarea>
+            <span class="field-error-msg">Please enter your delivery address.</span>
+          </div>
+          <div class="field">
+            <label for="notes">Additional notes</label>
+            <textarea id="notes" name="notes"
+              placeholder="Anything we should know about your order or delivery"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="submit-order-btn">Proceed to payment</button>
+        </form>
+
+        <aside class="summary-card reveal" id="order-summary">
+          <div class="skeleton" style="height:76px"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/products-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+
+</html>

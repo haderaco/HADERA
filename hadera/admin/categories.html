@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Categories — HADÉRA Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cat-card {
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-m);
+      overflow: hidden;
+      background: var(--color-bg-raised);
+    }
+
+    .cat-card img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+
+    .cat-card-body {
+      padding: 1rem 1.1rem;
+    }
+
+    .cat-card-body h3 {
+      font-size: 1rem;
+    }
+
+    .cat-card-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+    }
+
+    .add-cat-card {
+      border: 1.5px dashed var(--color-line);
+      border-radius: var(--radius-m);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      color: var(--color-ink-soft);
+      font-size: 0.9rem;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+  </style>
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+    <div class="admin-main">
+      <div class="admin-topbar" id="admin-topbar"></div>
+      <div class="admin-content">
+
+        <div class="admin-panel reveal">
+          <div class="admin-panel-head">
+            <h2>Categories</h2>
+          </div>
+          <div class="admin-panel-body">
+            <div class="cat-grid" id="cat-grid"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="cat-modal-backdrop"></div>
+  <div class="modal" id="cat-modal">
+    <div class="modal-head">
+      <h3 id="cat-modal-title">Add category</h3>
+      <button class="icon-btn" id="cat-modal-close" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <form id="cat-form">
+      <div class="field">
+        <label for="cf-name">Category name</label>
+        <input type="text" id="cf-name" name="name" required>
+      </div>
+      <div class="field">
+        <label for="cf-description">Short description</label>
+        <textarea id="cf-description" name="description"></textarea>
+      </div>
+      <div class="field">
+        <label for="cf-image">Category image</label>
+        <input type="file" id="cf-image" name="image" accept="image/*">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save category</button>
+    </form>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/admin-categories.js"></script>
+</body>
+
+</html>

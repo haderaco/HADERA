@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — HADÉRA Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.9rem;
+      height: 200px;
+      padding-top: 1rem;
+    }
+
+    .chart-bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .chart-bar {
+      width: 100%;
+      background: var(--color-accent-soft);
+      border-radius: 4px 4px 0 0;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+
+    .chart-bar:hover {
+      background: var(--color-accent);
+    }
+
+    .chart-bar-label {
+      font-size: 0.74rem;
+      color: var(--color-ink-faint);
+    }
+
+    .recent-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 0.88rem;
+    }
+
+    .recent-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+    <div class="admin-main">
+      <div class="admin-topbar" id="admin-topbar"></div>
+      <div class="admin-content">
+
+        <div class="stat-grid">
+          <div class="stat-card reveal">
+            <div class="label">Total products</div>
+            <div class="value">8</div>
+            <div class="delta">+2 this month</div>
+          </div>
+          <div class="stat-card reveal">
+            <div class="label">Total orders</div>
+            <div class="value">5</div>
+            <div class="delta">+3 this week</div>
+          </div>
+          <div class="stat-card reveal">
+            <div class="label">Pending orders</div>
+            <div class="value">1</div>
+            <div class="delta down">Needs attention</div>
+          </div>
+          <div class="stat-card reveal">
+            <div class="label">Revenue</div>
+            <div class="value">₦124.0M</div>
+            <div class="delta">+18% vs last month</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="admin-panel reveal">
+            <div class="admin-panel-head">
+              <h2>Orders, last 7 days</h2>
+            </div>
+            <div class="admin-panel-body">
+              <div class="chart-bars" id="chart-bars"></div>
+            </div>
+          </div>
+
+          <div class="admin-panel reveal">
+            <div class="admin-panel-head">
+              <h2>Appointment requests</h2>
+            </div>
+            <div class="admin-panel-body">
+              <ul class="recent-list" id="recent-appointments"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-panel reveal mt-l">
+          <div class="admin-panel-head">
+            <h2>Recent orders</h2>
+            <a href="orders.html" class="btn btn-secondary btn-sm">View all</a>
+          </div>
+          <div class="table-scroll">
+            <table class="admin-table" id="recent-orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
+</body>
+
+</html>

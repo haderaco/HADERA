@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings — HADÉRA Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .settings-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--color-line);
+      margin-bottom: 1.6rem;
+      flex-wrap: wrap;
+    }
+
+    .settings-tab {
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      color: var(--color-ink-soft);
+      border-bottom: 2px solid transparent;
+    }
+
+    .settings-tab.active {
+      color: var(--color-ink);
+      border-color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .settings-pane {
+      display: none;
+    }
+
+    .settings-pane.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+    <div class="admin-main">
+      <div class="admin-topbar" id="admin-topbar"></div>
+      <div class="admin-content">
+
+        <div class="admin-panel reveal">
+          <div class="admin-panel-body">
+            <div class="settings-tabs">
+              <button class="settings-tab active" data-pane="business">Business info</button>
+              <button class="settings-tab" data-pane="contact">Contact</button>
+              <button class="settings-tab" data-pane="email">Email</button>
+              <button class="settings-tab" data-pane="payment">Payment gateway</button>
+              <button class="settings-tab" data-pane="social">Social links</button>
+            </div>
+
+            <form id="settings-form">
+              <div class="settings-pane active" data-pane="business">
+                <div class="field"><label for="s-business-name">Business name</label><input type="text"
+                    id="s-business-name" value="HADÉRA"></div>
+                <div class="field"><label for="s-tagline">Tagline</label><input type="text" id="s-tagline"
+                    value="Modern commerce. Quality products. Trusted service."></div>
+                <div class="field"><label for="s-address">Registered address</label><textarea
+                    id="s-address">Abuja, Nigeria</textarea></div>
+              </div>
+
+              <div class="settings-pane" data-pane="contact">
+                <div class="field-row">
+                  <div class="field"><label for="s-phone">Phone</label><input type="tel" id="s-phone"
+                      value="+234 000 000 0000"></div>
+                  <div class="field"><label for="s-whatsapp">WhatsApp</label><input type="tel" id="s-whatsapp"
+                      value="+234 000 000 0000"></div>
+                </div>
+                <div class="field"><label for="s-support-email">Support email</label><input type="email"
+                    id="s-support-email" value="hello@hadera.ng"></div>
+              </div>
+
+              <div class="settings-pane" data-pane="email">
+                <div class="field"><label for="s-smtp-host">SMTP host</label><input type="text" id="s-smtp-host"
+                    placeholder="smtp.provider.com"></div>
+                <div class="field-row">
+                  <div class="field"><label for="s-smtp-user">SMTP username</label><input type="text" id="s-smtp-user"
+                      placeholder="Not connected"></div>
+                  <div class="field"><label for="s-smtp-pass">SMTP password</label><input type="password"
+                      id="s-smtp-pass" placeholder="Not connected"></div>
+                </div>
+                <p class="hint">Order and appointment notification emails will send once this is connected to a backend
+                  mail service.</p>
+              </div>
+
+              <div class="settings-pane" data-pane="payment">
+                <div class="field"><label for="s-provider">Payment provider</label>
+                  <select id="s-provider">
+                    <option>Flutterwave</option>
+                    <option>Paystack</option>
+                  </select>
+                </div>
+                <div class="field-row">
+                  <div class="field"><label for="s-public-key">Public key</label><input type="text" id="s-public-key"
+                      placeholder="Not connected"></div>
+                  <div class="field"><label for="s-secret-key">Secret key</label><input type="password"
+                      id="s-secret-key" placeholder="Never expose this in frontend code"></div>
+                </div>
+                <p class="hint">Secret keys must live on the backend only — this field is a placeholder for the admin
+                  UI, not for frontend use.</p>
+              </div>
+
+              <div class="settings-pane" data-pane="social">
+                <div class="field"><label for="s-instagram">Instagram URL</label><input type="url" id="s-instagram"
+                    placeholder="https://instagram.com/hadera"></div>
+                <div class="field"><label for="s-tiktok">TikTok URL</label><input type="url" id="s-tiktok"
+                    placeholder="https://tiktok.com/@hadera"></div>
+                <div class="field"><label for="s-facebook">Facebook URL</label><input type="url" id="s-facebook"
+                    placeholder="https://facebook.com/hadera"></div>
+              </div>
+
+              <button type="submit" class="btn btn-primary mt-l">Save settings</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/admin-settings.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — HADÉRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .about-hero-img {
+      border-radius: var(--radius-l);
+      overflow: hidden;
+      aspect-ratio: 21/9;
+      margin-top: 2.5rem;
+    }
+
+    .about-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .value-card {
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-l);
+      padding: 1.8rem;
+      background: var(--color-bg-raised);
+    }
+
+    .value-card h3 {
+      font-size: 1.1rem;
+    }
+
+    .value-card p {
+      margin-top: 0.7rem;
+      color: var(--color-ink-soft);
+      font-size: 0.92rem;
+    }
+
+    .mvv-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 880px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mvv-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="site-header"></div>
+
+  <main>
+    <div class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / About</div>
+        <span class="eyebrow">About HADÉRA</span>
+        <h1>Modern commerce, built on trust</h1>
+        <p>HADÉRA is a modern commerce platform operating in Nigeria in collaboration with an international partner,
+          connecting customers with quality automobiles, furniture and more.</p>
+        <div class="about-hero-img reveal">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop"
+            alt="The HADÉRA showroom">
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container mvv-row">
+        <div class="reveal">
+          <span class="eyebrow">Our mission</span>
+          <h2 style="margin-top:0.6rem;font-size:var(--step-2)">Make quality commerce easy to trust</h2>
+          <p style="margin-top:1rem;color:var(--color-ink-soft)">We exist to close the gap between what customers are
+            promised online and what actually arrives at their door — every listing on HADÉRA is reviewed before it goes
+            live, and every order is backed by a real team.</p>
+        </div>
+        <div class="reveal">
+          <span class="eyebrow">Our vision</span>
+          <h2 style="margin-top:0.6rem;font-size:var(--step-2)">A platform customers return to</h2>
+          <p style="margin-top:1rem;color:var(--color-ink-soft)">We're building HADÉRA category by category, starting
+            with cars and furniture, with the same standard of care applied to whatever we add next.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background:var(--color-surface);padding-top:0">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">What we hold ourselves to</span>
+          <h2 style="margin-top:0.6rem">Our values</h2>
+        </div>
+        <div class="values-grid">
+          <div class="value-card reveal">
+            <h3>Trust</h3>
+            <p>Clear specifications, honest condition notes, and a team that's reachable before and after a purchase.
+            </p>
+          </div>
+          <div class="value-card reveal">
+            <h3>Quality</h3>
+            <p>We would rather list fewer products and stand behind every one of them than list everything available.
+            </p>
+          </div>
+          <div class="value-card reveal">
+            <h3>Customer experience</h3>
+            <p>From browsing to delivery, every step is designed to be simple, transparent and worth repeating.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight reveal" style="background:var(--color-ink);color:var(--color-bg)">
+      <div class="container hstack" style="justify-content:space-between;flex-wrap:wrap;gap:1.5rem">
+        <div>
+          <h2 style="color:var(--color-bg);font-size:var(--step-2)">Have a question about HADÉRA?</h2>
+          <p style="margin-top:0.5rem;color:rgba(246,243,236,0.72)">We're happy to walk you through how the platform
+            works.</p>
+        </div>
+        <a href="contact.html" class="btn btn-accent">Contact us</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

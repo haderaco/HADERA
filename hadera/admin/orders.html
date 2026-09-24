@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orders — HADÉRA Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .drawer-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 0.9rem;
+    }
+
+    .drawer-row span:first-child {
+      color: var(--color-ink-soft);
+    }
+  </style>
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+    <div class="admin-main">
+      <div class="admin-topbar" id="admin-topbar"></div>
+      <div class="admin-content">
+
+        <div class="admin-panel reveal">
+          <div class="admin-panel-head">
+            <h2>All orders</h2>
+          </div>
+          <div class="admin-panel-body">
+            <div class="admin-toolbar" style="margin-bottom:1.4rem">
+              <input type="search" id="o-search" placeholder="Search by customer or order ID…"
+                style="flex:1;min-width:200px">
+              <select id="o-status">
+                <option value="">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="table-scroll">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Order details drawer -->
+  <div class="modal-backdrop" id="order-modal-backdrop"></div>
+  <div class="modal" id="order-modal">
+    <div class="modal-head">
+      <h3>Order details</h3>
+      <button class="icon-btn" id="order-modal-close" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <div id="order-drawer-body"></div>
+    <div class="field mt-l">
+      <label for="order-status-select">Update order status</label>
+      <select id="order-status-select">
+        <option value="pending">Pending</option>
+        <option value="paid">Paid</option>
+        <option value="processing">Processing</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-block" id="order-status-save">Save status</button>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/admin-orders.js"></script>
+</body>
+
+</html>

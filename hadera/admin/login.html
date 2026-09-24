@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin login — HADÉRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-body">
+
+  <div class="auth-screen">
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="logo">HADÉRA</div>
+        <span class="eyebrow">Admin dashboard</span>
+        <h1 style="font-size:var(--step-2);margin-top:1.4rem;margin-bottom:1.8rem">Sign in</h1>
+
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" name="email" required autocomplete="username">
+            <span class="field-error-msg">Please enter a valid email.</span>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required autocomplete="current-password">
+            <span class="field-error-msg">Please enter your password.</span>
+          </div>
+          <div class="remember-row">
+            <label><input type="checkbox" id="remember-me"> Remember me</label>
+            <a href="#" style="color:var(--color-accent-ink)">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="login-btn">Log in</button>
+          <p id="login-error" style="display:none;color:var(--color-danger);font-size:0.85rem;margin-top:1rem"></p>
+        </form>
+
+        <p style="font-size:0.8rem;color:var(--color-ink-faint);margin-top:1.6rem">
+          Admin access is restricted to authorized accounts.
+        </p>
+      </div>
+    </div>
+    <div class="auth-visual">
+      <div class="auth-visual-text">
+        <h2>Run HADÉRA from one place</h2>
+        <p>Manage products, orders and appointments across cars, furniture and whatever comes next.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('login-form');
+      const btn = document.getElementById('login-btn');
+      const errorEl = document.getElementById('login-error');
+
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+
+        const emailField =
+          form.email.closest('.field');
+
+        const passField =
+          form.password.closest('.field');
+
+        const emailOk =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            form.email.value.trim()
+          );
+
+        const passOk =
+          form.password.value.length > 0;
+
+        emailField.classList.toggle(
+          'error',
+          !emailOk
+        );
+
+        passField.classList.toggle(
+          'error',
+          !passOk
+        );
+
+        errorEl.style.display = 'none';
+
+        if (!emailOk || !passOk) {
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+
+        try {
+          await loginAdmin({
+            email: form.email.value.trim(),
+            password: form.password.value,
+          });
+
+          window.location.replace('dashboard.html');
+        } catch (error) {
+          errorEl.textContent =
+            error.message ||
+            'Invalid email or password.';
+
+          errorEl.style.display = 'block';
+
+          btn.disabled = false;
+          btn.textContent = 'Log in';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

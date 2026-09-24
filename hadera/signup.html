@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up — HADÉRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 340px);
+    }
+
+    .auth-form-side {
+      display: flex;
+      align-items: center;
+      padding: clamp(2rem, 5vw, 4rem) var(--gutter);
+    }
+
+    .auth-form-inner {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .auth-visual-side {
+      background: var(--color-ink);
+      background-image: linear-gradient(160deg, rgba(169, 120, 47, 0.35), rgba(23, 20, 15, 0.2)), url('https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1400&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      padding: 3rem;
+    }
+
+    .auth-visual-side-text {
+      color: #fff;
+    }
+
+    .auth-visual-side-text h2 {
+      color: #fff;
+      font-size: var(--step-2);
+    }
+
+    .auth-visual-side-text p {
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 0.6rem;
+      max-width: 34ch;
+    }
+
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--color-ink-soft);
+      margin: -0.3rem 0 1.4rem;
+    }
+
+    .terms-row input {
+      margin-top: 0.2rem;
+    }
+
+    .terms-row a {
+      color: var(--color-accent-ink);
+    }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 1.6rem;
+      font-size: 0.88rem;
+      color: var(--color-ink-soft);
+    }
+
+    .auth-switch a {
+      color: var(--color-accent-ink);
+      font-weight: 600;
+    }
+
+    @media (max-width: 880px) {
+      .auth-visual-side {
+        display: none;
+      }
+
+      .auth-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="site-header"></div>
+
+  <main>
+    <div class="auth-wrap">
+      <div class="auth-form-side">
+        <div class="auth-form-inner">
+          <span class="eyebrow">Create your account</span>
+          <h1 style="font-size:var(--step-2);margin-top:0.6rem;margin-bottom:1.8rem">Sign up for HADÉRA</h1>
+
+          <form id="signup-form" novalidate>
+            <div class="field">
+              <label for="su-name">Full name</label>
+              <input type="text" id="su-name" name="fullName" required autocomplete="name">
+              <span class="field-error-msg">Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="su-email">Email</label>
+              <input type="email" id="su-email" name="email" required autocomplete="email">
+              <span class="field-error-msg">Please enter a valid email address.</span>
+            </div>
+            <div class="field">
+              <label for="su-phone">Phone number</label>
+              <input type="tel" id="su-phone" name="phone" required autocomplete="tel">
+              <span class="field-error-msg">Please enter a valid phone number.</span>
+            </div>
+            <div class="field">
+              <label for="su-password">Password</label>
+              <input type="password" id="su-password" name="password" required autocomplete="new-password"
+                minlength="8">
+              <span class="hint">At least 8 characters.</span>
+              <span class="field-error-msg">Password must be at least 8 characters.</span>
+            </div>
+            <div class="field">
+              <label for="su-confirm">Confirm password</label>
+              <input type="password" id="su-confirm" name="confirmPassword" required autocomplete="new-password">
+              <span class="field-error-msg">Passwords do not match.</span>
+            </div>
+
+            <div class="terms-row">
+              <input type="checkbox" id="su-terms" name="acceptTerms" required>
+              <label for="su-terms">I agree to HADÉRA's <a href="terms.html">Terms &amp; Conditions</a>.</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="signup-btn">Create account</button>
+          </form>
+
+          <p class="auth-switch">Already have an account? <a href="contact.html">Contact HADÉRA</a> to sign in.</p>
+        </div>
+      </div>
+      <div class="auth-visual-side">
+        <div class="auth-visual-side-text">
+          <h2>Discover more. Live better.</h2>
+          <p>Create an account to track your orders and appointments across cars, furniture and more.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const { toast } = HADERA;
+      const form = document.getElementById('signup-form');
+      const btn = document.getElementById('signup-btn');
+      const requiredFields = ['fullName', 'email', 'phone', 'password', 'confirmPassword'];
+
+      function validate() {
+        let valid = true;
+        requiredFields.forEach(name => {
+          const input = form.elements[name];
+          const field = input.closest('.field');
+          let ok = input.value.trim().length > 0;
+          if (name === 'email' && ok) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+          if (name === 'phone' && ok) ok = input.value.trim().replace(/\D/g, '').length >= 10;
+          if (name === 'password' && ok) ok = input.value.length >= 8;
+          if (name === 'confirmPassword' && ok) ok = input.value === form.password.value;
+          field.classList.toggle('error', !ok);
+          if (!ok) valid = false;
+        });
+        if (!form.acceptTerms.checked) { toast('Please accept the Terms & Conditions to continue.', 'error'); valid = false; }
+        return valid;
+      }
+
+      requiredFields.forEach(name => form.elements[name].addEventListener('blur', validate));
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!validate()) { toast('Please fix the highlighted fields.', 'error'); return; }
+
+        btn.disabled = true;
+        btn.textContent = 'Creating account…';
+
+        try {
+          await registerCustomer({
+            fullName: form.fullName.value.trim(),
+            email: form.email.value.trim(),
+            phone: form.phone.value.trim(),
+            password: form.password.value,
+          });
+          toast('Account created — welcome to HADÉRA.', 'success');
+          form.reset();
+        } catch (err) {
+          toast('Something went wrong. Please try again.', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Create account';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
