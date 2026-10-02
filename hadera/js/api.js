@@ -6,7 +6,7 @@
 
 const API_CONFIG = {
   // Replace this with the actual deployed HADÉRA backend URL.
-  baseUrl: 'https://hadera-co.onrender.com/',
+  baseUrl: 'https://hadera-co.onrender.com/api',
 };
 
 
