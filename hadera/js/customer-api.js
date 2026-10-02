@@ -411,7 +411,12 @@ async function requireCustomerSession() {
         }
 
         return true;
-    } catch {
+    } catch (error) {
+        console.error(
+            'Customer session verification failed:',
+            error
+        );
+
         clearCustomerSession();
 
         window.location.replace(
