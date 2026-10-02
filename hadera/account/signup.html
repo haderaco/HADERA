@@ -96,6 +96,75 @@
             margin-top: -0.5rem;
         }
 
+        /* --------------------------------------------------
+           PASSWORD VISIBILITY
+        -------------------------------------------------- */
+
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding-right: 3rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            transform: translateY(-50%);
+
+            width: 30px;
+            height: 30px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+            border: 0;
+            background: transparent;
+
+            color: var(--color-ink-soft);
+
+            cursor: pointer;
+        }
+
+        .password-toggle:hover {
+            color: var(--color-ink);
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .password-toggle svg {
+            width: 19px;
+            height: 19px;
+
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .password-toggle .eye-off {
+            display: none;
+        }
+
+        .password-toggle.is-visible .eye {
+            display: none;
+        }
+
+        .password-toggle.is-visible .eye-off {
+            display: block;
+        }
+
         @media (max-width: 600px) {
             .account-page {
                 padding: 2rem 1rem;
@@ -112,94 +181,155 @@
 
     <div id="site-header"></div>
 
+
     <main class="account-page">
 
         <section class="account-card">
 
             <div class="account-header">
-                <h1>Create your account</h1>
+
+                <h1>
+                    Create your account
+                </h1>
+
                 <p>
                     Create a HADÉRA account to track your orders
                     and manage your details.
                 </p>
+
             </div>
 
+
             <div id="account-message" class="account-message"></div>
+
 
             <form id="signup-form" class="account-form">
 
                 <div class="field">
+
                     <label for="name">
                         Full name
                     </label>
 
                     <input id="name" name="name" type="text" autocomplete="name" required>
+
                 </div>
 
+
                 <div class="field">
+
                     <label for="email">
                         Email
                     </label>
 
                     <input id="email" name="email" type="email" autocomplete="email" required>
+
                 </div>
+
 
                 <div class="field-row">
 
                     <div class="field">
+
                         <label for="phone">
                             Phone
                         </label>
 
                         <input id="phone" name="phone" type="tel" autocomplete="tel">
+
                     </div>
 
+
                     <div class="field">
+
                         <label for="city">
                             City
                         </label>
 
                         <input id="city" name="city" type="text" autocomplete="address-level2">
+
                     </div>
 
                 </div>
 
+
                 <div class="field">
+
                     <label for="state">
                         State
                     </label>
 
                     <input id="state" name="state" type="text" autocomplete="address-level1">
+
                 </div>
 
+
                 <div class="field">
+
                     <label for="address">
                         Address
                     </label>
 
                     <textarea id="address" name="address" rows="3" autocomplete="street-address"></textarea>
+
                 </div>
 
+
                 <div class="field">
+
                     <label for="password">
                         Password
                     </label>
 
-                    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8"
-                        required>
+                    <div class="password-wrapper">
+
+                        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8"
+                            required>
+
+                        <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password"
+                            aria-pressed="false">
+
+                            <!-- Eye -->
+                            <svg class="eye" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+
+                                <circle cx="12" cy="12" r="2.5"></circle>
+                            </svg>
+
+
+                            <!-- Eye off -->
+                            <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 3l18 18"></path>
+
+                                <path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a17.7 17.7 0 0 1-3.2 3.9"></path>
+
+                                <path d="M6.7 6.7C3.6 8.6 2 12 2 12s3.5 6 10 6c1.7 0 3.1-.4 4.4-1"></path>
+
+                                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
 
                     <div class="password-note">
                         Password must be at least 8 characters.
                     </div>
+
                 </div>
 
+
                 <label class="checkbox-row">
+
                     <input id="rememberMe" name="rememberMe" type="checkbox" checked>
 
                     <span>
                         Keep me signed in
                     </span>
+
                 </label>
+
 
                 <button type="submit" class="btn btn-primary account-submit" id="signup-button">
                     Create account
@@ -207,26 +337,34 @@
 
             </form>
 
+
             <div class="account-footer">
+
                 Already have an account?
-                <a href="login.html">
+
+                <a href="../login.html">
                     Log in
                 </a>
+
             </div>
 
         </section>
 
     </main>
 
+
     <div id="site-footer"></div>
+
 
     <script src="../js/main.js"></script>
     <script src="../js/customer-api.js"></script>
+
 
     <script>
         document.addEventListener(
             'DOMContentLoaded',
             () => {
+
                 const form =
                     document.getElementById(
                         'signup-form'
@@ -242,71 +380,165 @@
                         'account-message'
                     );
 
+                const passwordInput =
+                    document.getElementById(
+                        'password'
+                    );
+
+                const passwordToggle =
+                    document.getElementById(
+                        'password-toggle'
+                    );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PASSWORD VISIBILITY
+                |--------------------------------------------------------------------------
+                */
+
+                passwordToggle.addEventListener(
+                    'click',
+                    () => {
+
+                        const isVisible =
+                            passwordInput.type ===
+                            'text';
+
+
+                        passwordInput.type =
+                            isVisible
+                                ? 'password'
+                                : 'text';
+
+
+                        passwordToggle.classList.toggle(
+                            'is-visible',
+                            !isVisible
+                        );
+
+
+                        passwordToggle.setAttribute(
+                            'aria-pressed',
+                            String(!isVisible)
+                        );
+
+
+                        passwordToggle.setAttribute(
+                            'aria-label',
+                            isVisible
+                                ? 'Show password'
+                                : 'Hide password'
+                        );
+
+                    }
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | MESSAGE
+                |--------------------------------------------------------------------------
+                */
+
                 function showMessage(
                     text,
                     type = 'error'
                 ) {
-                    message.textContent = text;
+
+                    message.textContent =
+                        text;
+
                     message.className =
                         `account-message show ${type}`;
+
                 }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | EXISTING CUSTOMER SESSION
+                |--------------------------------------------------------------------------
+                */
 
                 if (
                     typeof isCustomerLoggedIn ===
                     'function' &&
                     isCustomerLoggedIn()
                 ) {
+
                     window.location.replace(
                         'dashboard.html'
                     );
 
                     return;
+
                 }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | SIGNUP
+                |--------------------------------------------------------------------------
+                */
 
                 form.addEventListener(
                     'submit',
                     async event => {
+
                         event.preventDefault();
 
                         message.className =
                             'account-message';
 
+
                         button.disabled = true;
+
                         button.textContent =
                             'Creating account...';
 
+
                         try {
+
                             const formData =
                                 new FormData(form);
+
 
                             const result =
                                 await signupCustomer(
                                     {
                                         name:
-                                            formData.get('name')
+                                            formData
+                                                .get('name')
                                                 .trim(),
 
                                         email:
-                                            formData.get('email')
+                                            formData
+                                                .get('email')
                                                 .trim(),
 
                                         phone:
-                                            formData.get('phone')
+                                            formData
+                                                .get('phone')
                                                 .trim(),
 
                                         password:
-                                            formData.get('password'),
+                                            formData
+                                                .get('password'),
 
                                         state:
-                                            formData.get('state')
+                                            formData
+                                                .get('state')
                                                 .trim(),
 
                                         city:
-                                            formData.get('city')
+                                            formData
+                                                .get('city')
                                                 .trim(),
 
                                         address:
-                                            formData.get('address')
+                                            formData
+                                                .get('address')
                                                 .trim()
                                     },
 
@@ -315,33 +547,44 @@
                                     ) === 'on'
                                 );
 
+
                             showMessage(
                                 result.message ||
                                 'Account created successfully.',
                                 'success'
                             );
 
+
                             window.setTimeout(
                                 () => {
+
                                     window.location.replace(
                                         'dashboard.html'
                                     );
+
                                 },
                                 500
                             );
 
+
                         } catch (error) {
+
                             showMessage(
                                 error.message ||
                                 'Unable to create your account.'
                             );
 
+
                             button.disabled = false;
+
                             button.textContent =
                                 'Create account';
+
                         }
+
                     }
                 );
+
             }
         );
     </script>
