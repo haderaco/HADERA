@@ -4,7 +4,7 @@
    ========================================================================== */
 
 const CUSTOMER_API_CONFIG = {
-    baseUrl: 'https://hadera-co.onrender.com//customer/auth/me'
+    baseUrl: 'https://hadera-co.onrender.com'
 };
 
 
@@ -144,8 +144,14 @@ async function customerApiRequest(
             `Bearer ${token}`;
     }
 
+    // Build the API URL safely
+    const url =
+        `${CUSTOMER_API_CONFIG.baseUrl.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
+
+    console.log('CUSTOMER API REQUEST:', url);
+
     const response = await fetch(
-        `${CUSTOMER_API_CONFIG.baseUrl}${path}`,
+        url,
         {
             method,
             headers,
@@ -164,15 +170,6 @@ async function customerApiRequest(
         result = null;
     }
 
-
-    /*
-     * Only clear the stored customer session when
-     * an authenticated request actually fails.
-     *
-     * A 401 during login/signup means the credentials
-     * were rejected, not that an existing session expired.
-     */
-
     if (response.status === 401) {
         if (auth) {
             clearCustomerSession();
@@ -188,7 +185,6 @@ async function customerApiRequest(
             'Invalid email or password.'
         );
     }
-
 
     if (!response.ok) {
         throw new Error(
