@@ -385,17 +385,29 @@ async function logoutCustomer() {
    ========================================================================== */
 
 async function requireCustomerSession() {
-    if (!getCustomerToken()) {
-        window.location.replace(
-            '../login.html'
+    const token = getCustomerToken();
+
+    if (!token) {
+        console.error(
+            'CUSTOMER AUTH: No customer token found.'
         );
 
+        // TEMPORARY: do not redirect while debugging
         return false;
     }
 
+    console.log(
+        'CUSTOMER AUTH: Token found:',
+        token.substring(0, 20) + '...'
+    );
+
     try {
-        const result =
-            await getCurrentCustomer();
+        const result = await getCurrentCustomer();
+
+        console.log(
+            'CUSTOMER AUTH: /customer/auth/me response:',
+            result
+        );
 
         if (result.customer) {
             const rememberMe = Boolean(
@@ -411,18 +423,20 @@ async function requireCustomerSession() {
         }
 
         return true;
+
     } catch (error) {
         console.error(
-            'Customer session verification failed:',
+            'CUSTOMER AUTH: Session verification FAILED:',
             error
         );
 
-        clearCustomerSession();
-
-        window.location.replace(
-            '../login.html'
+        console.error(
+            'CUSTOMER AUTH: Error message:',
+            error?.message
         );
 
+        // TEMPORARY: do NOT clear the session or redirect
+        // so we can inspect the actual problem.
         return false;
     }
 }
