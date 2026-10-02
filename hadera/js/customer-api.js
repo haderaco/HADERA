@@ -4,7 +4,7 @@
    ========================================================================== */
 
 const CUSTOMER_API_CONFIG = {
-    baseUrl: 'https://hadera-co.onrender.com'
+    baseUrl: 'https://hadera-co.onrender.com/api'
 };
 
 
