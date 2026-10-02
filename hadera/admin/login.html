@@ -28,8 +28,49 @@
           </div>
           <div class="field">
             <label for="login-password">Password</label>
-            <input type="password" id="login-password" name="password" required autocomplete="current-password">
-            <span class="field-error-msg">Please enter your password.</span>
+
+            <div style="position:relative">
+              <input type="password" id="login-password" name="password" required autocomplete="current-password"
+                style="padding-right:3rem">
+
+              <button type="button" id="toggle-password" aria-label="Show password" title="Show password" style="
+        position:absolute;
+        right:0.75rem;
+        top:50%;
+        transform:translateY(-50%);
+        border:0;
+        background:none;
+        padding:0.25rem;
+        cursor:pointer;
+        color:var(--color-ink-soft);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      ">
+                <!-- Eye closed -->
+                <svg id="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 3L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" />
+                  <path d="M9.9 4.3A10.9 10.9 0 0 1 12 4.1c5.2 0 8.8 4.3 10 7.9a12.8 12.8 0 0 1-3.1 4.8"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M6.1 6.1C3.9 7.7 2.6 10 2 12c1.2 3.6 4.8 7.9 10 7.9 1.5 0 2.9-.3 4.1-.9"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <!-- Eye open -->
+                <svg id="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                  style="display:none">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="1.8"
+                    stroke-linejoin="round" />
+                  <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
+                </svg>
+              </button>
+            </div>
+
+            <span class="field-error-msg">
+              Please enter your password.
+            </span>
           </div>
           <div class="remember-row">
             <label><input type="checkbox" id="remember-me"> Remember me</label>
@@ -56,64 +97,174 @@
   <script src="../js/api.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      const btn = document.getElementById('login-btn');
-      const errorEl = document.getElementById('login-error');
+      const form =
+        document.getElementById('login-form');
 
-      form.addEventListener('submit', async e => {
-        e.preventDefault();
+      const btn =
+        document.getElementById('login-btn');
 
-        const emailField =
-          form.email.closest('.field');
+      const errorEl =
+        document.getElementById('login-error');
 
-        const passField =
-          form.password.closest('.field');
+      const passwordInput =
+        document.getElementById('login-password');
 
-        const emailOk =
-          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-            form.email.value.trim()
+      const togglePassword =
+        document.getElementById('toggle-password');
+
+      const eyeClosed =
+        document.getElementById('eye-closed');
+
+      const eyeOpen =
+        document.getElementById('eye-open');
+
+      const rememberMe =
+        document.getElementById('remember-me');
+
+
+      // ------------------------------------------
+      // PASSWORD VISIBILITY
+      // ------------------------------------------
+
+      togglePassword.addEventListener(
+        'click',
+        () => {
+          const isPassword =
+            passwordInput.type === 'password';
+
+          passwordInput.type =
+            isPassword
+              ? 'text'
+              : 'password';
+
+          eyeClosed.style.display =
+            isPassword
+              ? 'none'
+              : 'block';
+
+          eyeOpen.style.display =
+            isPassword
+              ? 'block'
+              : 'none';
+
+          togglePassword.setAttribute(
+            'aria-label',
+            isPassword
+              ? 'Hide password'
+              : 'Show password'
           );
 
-        const passOk =
-          form.password.value.length > 0;
+          togglePassword.setAttribute(
+            'title',
+            isPassword
+              ? 'Hide password'
+              : 'Show password'
+          );
+        }
+      );
 
-        emailField.classList.toggle(
-          'error',
-          !emailOk
+
+      // ------------------------------------------
+      // REMEMBER ME PREFERENCE
+      // ------------------------------------------
+
+      const remembered =
+        localStorage.getItem(
+          'hadera_remember_admin'
         );
 
-        passField.classList.toggle(
-          'error',
-          !passOk
-        );
+      if (remembered === 'true') {
+        rememberMe.checked = true;
+      }
 
-        errorEl.style.display = 'none';
 
-        if (!emailOk || !passOk) {
-          return;
+      // ------------------------------------------
+      // LOGIN
+      // ------------------------------------------
+
+      form.addEventListener(
+        'submit',
+        async (e) => {
+          e.preventDefault();
+
+          const emailField =
+            form.email.closest('.field');
+
+          const passField =
+            form.password.closest('.field');
+
+          const emailOk =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+              form.email.value.trim()
+            );
+
+          const passOk =
+            form.password.value.length > 0;
+
+          emailField.classList.toggle(
+            'error',
+            !emailOk
+          );
+
+          passField.classList.toggle(
+            'error',
+            !passOk
+          );
+
+          errorEl.style.display = 'none';
+
+          if (!emailOk || !passOk) {
+            return;
+          }
+
+          btn.disabled = true;
+          btn.textContent = 'Signing in…';
+
+          try {
+            await loginAdmin({
+              email:
+                form.email.value.trim(),
+              password:
+                form.password.value
+            });
+
+            /*
+             * Store the admin's preference.
+             * The actual authentication token
+             * remains managed by api.js.
+             */
+            if (rememberMe.checked) {
+              localStorage.setItem(
+                'hadera_remember_admin',
+                'true'
+              );
+            } else {
+              localStorage.removeItem(
+                'hadera_remember_admin'
+              );
+            }
+
+            window.location.replace(
+              'dashboard.html'
+            );
+
+          } catch (error) {
+            console.error(
+              'Admin login failed:',
+              error
+            );
+
+            errorEl.textContent =
+              error.message ||
+              'Invalid email or password.';
+
+            errorEl.style.display = 'block';
+
+            btn.disabled = false;
+            btn.textContent = 'Log in';
+          }
         }
-
-        btn.disabled = true;
-        btn.textContent = 'Signing in…';
-
-        try {
-          await loginAdmin({
-            email: form.email.value.trim(),
-            password: form.password.value,
-          });
-
-          window.location.replace('dashboard.html');
-        } catch (error) {
-          errorEl.textContent =
-            error.message ||
-            'Invalid email or password.';
-
-          errorEl.style.display = 'block';
-
-          btn.disabled = false;
-          btn.textContent = 'Log in';
-        }
-      });
+      );
     });
   </script>
 </body>

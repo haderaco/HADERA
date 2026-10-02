@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Log In — HADÉRA</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .account-page {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 1rem;
+        }
+
+        .account-card {
+            width: min(100%, 500px);
+            background: var(--color-surface);
+            border: 1px solid var(--color-line);
+            border-radius: var(--radius-lg);
+            padding: 2.25rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .account-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .account-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .account-header p {
+            color: var(--color-ink-soft);
+            margin: 0;
+        }
+
+        .account-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .account-submit {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .account-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--color-ink-soft);
+            font-size: 0.9rem;
+        }
+
+        .account-footer a {
+            font-weight: 600;
+        }
+
+        .account-message {
+            display: none;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+
+        .account-message.show {
+            display: block;
+        }
+
+        .account-message.error {
+            background: #fdf0f0;
+            color: #9b2c2c;
+            border: 1px solid #efcaca;
+        }
+
+        .account-message.success {
+            background: #eef8f1;
+            color: #2d6843;
+            border: 1px solid #cce5d4;
+        }
+
+        .account-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .account-page {
+                padding: 2rem 1rem;
+            }
+
+            .account-card {
+                padding: 1.5rem;
+            }
+
+            .account-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="site-header"></div>
+
+    <main class="account-page">
+
+        <section class="account-card">
+
+            <div class="account-header">
+                <h1>Welcome back</h1>
+
+                <p>
+                    Log in to your HADÉRA account.
+                </p>
+            </div>
+
+            <div id="account-message" class="account-message"></div>
+
+            <form id="login-form" class="account-form">
+
+                <div class="field">
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input id="email" name="email" type="email" autocomplete="email" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                </div>
+
+                <div class="account-actions">
+
+                    <label class="checkbox-row">
+                        <input id="rememberMe" name="rememberMe" type="checkbox" checked>
+
+                        <span>
+                            Keep me signed in
+                        </span>
+                    </label>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary account-submit" id="login-button">
+                    Log in
+                </button>
+
+            </form>
+
+            <div class="account-footer">
+                Don't have an account?
+                <a href="signup.html">
+                    Create one
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/customer-api.js"></script>
+
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+                const form =
+                    document.getElementById(
+                        'login-form'
+                    );
+
+                const button =
+                    document.getElementById(
+                        'login-button'
+                    );
+
+                const message =
+                    document.getElementById(
+                        'account-message'
+                    );
+
+                function showMessage(
+                    text,
+                    type = 'error'
+                ) {
+                    message.textContent = text;
+
+                    message.className =
+                        `account-message show ${type}`;
+                }
+
+                if (
+                    typeof isCustomerLoggedIn ===
+                    'function' &&
+                    isCustomerLoggedIn()
+                ) {
+                    window.location.replace(
+                        'dashboard.html'
+                    );
+
+                    return;
+                }
+
+                form.addEventListener(
+                    'submit',
+                    async event => {
+                        event.preventDefault();
+
+                        message.className =
+                            'account-message';
+
+                        button.disabled = true;
+                        button.textContent =
+                            'Logging in...';
+
+                        try {
+                            const formData =
+                                new FormData(form);
+
+                            const result =
+                                await loginCustomer(
+                                    {
+                                        email:
+                                            formData.get(
+                                                'email'
+                                            ).trim(),
+
+                                        password:
+                                            formData.get(
+                                                'password'
+                                            )
+                                    },
+
+                                    formData.get(
+                                        'rememberMe'
+                                    ) === 'on'
+                                );
+
+                            showMessage(
+                                result.message ||
+                                'Login successful.',
+                                'success'
+                            );
+
+                            window.setTimeout(
+                                () => {
+                                    window.location.replace(
+                                        'dashboard.html'
+                                    );
+                                },
+                                300
+                            );
+
+                        } catch (error) {
+                            showMessage(
+                                error.message ||
+                                'Unable to log in.'
+                            );
+
+                            button.disabled = false;
+                            button.textContent =
+                                'Log in';
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+</body>
+
+</html>

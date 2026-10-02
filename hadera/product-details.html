@@ -1,163 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Product — HADÉRA</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .pd-layout {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: clamp(2rem, 5vw, 4rem);
-      align-items: start;
-    }
-
-    .pd-gallery-main {
-      aspect-ratio: 4/3;
-      border-radius: var(--radius-l);
-      overflow: hidden;
-      background: var(--color-surface);
-    }
-
-    .pd-gallery-main img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .pd-thumbs {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 0.9rem;
-    }
-
-    .pd-thumb {
-      width: 84px;
-      height: 64px;
-      border-radius: var(--radius-s);
-      overflow: hidden;
-      border: 2px solid transparent;
-      cursor: pointer;
-      opacity: 0.65;
-      transition: opacity .3s ease, border-color .3s ease;
-    }
-
-    .pd-thumb.active {
-      opacity: 1;
-      border-color: var(--color-ink);
-    }
-
-    .pd-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .pd-price {
-      font-size: var(--step-3);
-      font-family: var(--font-display);
-      color: var(--color-accent-ink);
-      margin-top: 0.6rem;
-    }
-
-    .pd-meta-row {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin: 1rem 0 1.4rem;
-    }
-
-    .pd-specs {
-      margin-top: 1.6rem;
-      border-top: 1px solid var(--color-line);
-      padding-top: 1.4rem;
-    }
-
-    .pd-specs h3 {
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-    }
-
-    .spec-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid var(--color-line);
-      font-size: 0.92rem;
-    }
-
-    .spec-row span:first-child {
-      color: var(--color-ink-soft);
-    }
-
-    .qty-selector {
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--color-line);
-      border-radius: var(--radius-s);
-      width: fit-content;
-    }
-
-    .qty-selector button {
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      font-size: 1.1rem;
-    }
-
-    .qty-selector button:hover {
-      background: var(--color-surface);
-    }
-
-    .qty-selector span {
-      width: 40px;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .pd-cta-row {
-      display: flex;
-      gap: 0.9rem;
-      margin-top: 1.6rem;
-      flex-wrap: wrap;
-    }
-
-    .pd-cta-row .btn {
-      flex: 1;
-      min-width: 160px;
-    }
-
-    @media (max-width: 880px) {
-      .pd-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — HADÉRA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .pd-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  .pd-gallery-main { aspect-ratio: 4/3; border-radius: var(--radius-l); overflow: hidden; background: var(--color-surface); }
+  .pd-gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+  .pd-thumbs { display: flex; gap: 0.8rem; margin-top: 0.9rem; }
+  .pd-thumb { width: 84px; height: 64px; border-radius: var(--radius-s); overflow: hidden; border: 2px solid transparent; cursor: pointer; opacity: 0.65; transition: opacity .3s ease, border-color .3s ease; }
+  .pd-thumb.active { opacity: 1; border-color: var(--color-ink); }
+  .pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .pd-price { font-size: var(--step-3); font-family: var(--font-display); color: var(--color-accent-ink); margin-top: 0.6rem; }
+  .pd-meta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0 1.4rem; }
+  .pd-specs { margin-top: 1.6rem; border-top: 1px solid var(--color-line); padding-top: 1.4rem; }
+  .pd-specs h3 { font-size: 1.05rem; margin-bottom: 1rem; }
+  .spec-row { display: flex; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--color-line); font-size: 0.92rem; }
+  .spec-row span:first-child { color: var(--color-ink-soft); }
+  .qty-selector { display: flex; align-items: center; border: 1px solid var(--color-line); border-radius: var(--radius-s); width: fit-content; }
+  .qty-selector button { width: 40px; height: 40px; background: transparent; font-size: 1.1rem; }
+  .qty-selector button:hover { background: var(--color-surface); }
+  .qty-selector span { width: 40px; text-align: center; font-weight: 600; }
+  .pd-cta-row { display: flex; gap: 0.9rem; margin-top: 1.6rem; flex-wrap: wrap; }
+  .pd-cta-row .btn { flex: 1; min-width: 160px; }
+  @media (max-width: 880px) { .pd-layout { grid-template-columns: 1fr; } }
+</style>
 </head>
-
 <body>
 
-  <div id="site-header"></div>
+<div id="site-header"></div>
 
-  <main>
-    <div class="section" id="pd-root">
-      <div class="container">
-        <div class="breadcrumb" id="pd-breadcrumb"><a href="index.html">Home</a> / <a href="products.html">Shop</a> /
-          <span id="pd-crumb-name">Product</span></div>
-        <div class="pd-layout" id="pd-content"></div>
-      </div>
+<main>
+  <div class="section" id="pd-root">
+    <div class="container">
+      <div class="breadcrumb" id="pd-breadcrumb"><a href="index.html">Home</a> / <a href="products.html">Shop</a> / <span id="pd-crumb-name">Product</span></div>
+      <div class="pd-layout" id="pd-content"></div>
     </div>
-  </main>
+  </div>
+</main>
 
-  <div id="site-footer"></div>
+<div id="site-footer"></div>
 
-  <script src="js/main.js"></script>
-  <script src="js/products-data.js"></script>
-  <script src="js/product-details.js"></script>
+<script src="js/main.js"></script>
+<script src="js/api.js"></script>
+<script src="js/products-data.js"></script>
+<script src="js/product-details.js"></script>
 </body>
-
 </html>

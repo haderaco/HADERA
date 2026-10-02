@@ -4,11 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Dashboard — HADÉRA Admin</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin.css">
+
   <style>
     .chart-bars {
       display: flex;
@@ -75,62 +82,189 @@
 <body class="admin-body">
 
   <div class="admin-shell">
-    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <aside
+      class="admin-sidebar"
+      id="admin-sidebar"
+    ></aside>
+
     <div class="admin-main">
-      <div class="admin-topbar" id="admin-topbar"></div>
+
+      <div
+        class="admin-topbar"
+        id="admin-topbar"
+      ></div>
+
       <div class="admin-content">
 
+        <!-- DASHBOARD STATS -->
         <div class="stat-grid">
+
           <div class="stat-card reveal">
-            <div class="label">Total products</div>
-            <div class="value">8</div>
-            <div class="delta">+2 this month</div>
+            <div class="label">
+              Total products
+            </div>
+
+            <div
+              class="value"
+              id="stat-total-products"
+            >
+              0
+            </div>
+
+            <div class="delta">
+              Products in catalogue
+            </div>
           </div>
+
+
           <div class="stat-card reveal">
-            <div class="label">Total orders</div>
-            <div class="value">5</div>
-            <div class="delta">+3 this week</div>
+            <div class="label">
+              Total orders
+            </div>
+
+            <div
+              class="value"
+              id="stat-total-orders"
+            >
+              0
+            </div>
+
+            <div class="delta">
+              Orders received
+            </div>
           </div>
+
+
           <div class="stat-card reveal">
-            <div class="label">Pending orders</div>
-            <div class="value">1</div>
-            <div class="delta down">Needs attention</div>
+            <div class="label">
+              Pending orders
+            </div>
+
+            <div
+              class="value"
+              id="stat-pending-orders"
+            >
+              0
+            </div>
+
+            <div class="delta down">
+              Needs attention
+            </div>
           </div>
+
+
           <div class="stat-card reveal">
-            <div class="label">Revenue</div>
-            <div class="value">₦124.0M</div>
-            <div class="delta">+18% vs last month</div>
+            <div class="label">
+              Appointments
+            </div>
+
+            <div
+              class="value"
+              id="stat-total-appointments"
+            >
+              0
+            </div>
+
+            <div class="delta">
+              Appointment requests
+            </div>
           </div>
+
+
+          <div class="stat-card reveal">
+            <div class="label">
+              Revenue
+            </div>
+
+            <div
+              class="value"
+              id="stat-revenue"
+            >
+              ₦0
+            </div>
+
+            <div class="delta">
+              Total paid orders
+            </div>
+          </div>
+
         </div>
 
+
+        <!-- CHART + APPOINTMENTS -->
         <div class="two-col">
-          <div class="admin-panel reveal">
-            <div class="admin-panel-head">
-              <h2>Orders, last 7 days</h2>
-            </div>
-            <div class="admin-panel-body">
-              <div class="chart-bars" id="chart-bars"></div>
-            </div>
-          </div>
 
           <div class="admin-panel reveal">
+
             <div class="admin-panel-head">
-              <h2>Appointment requests</h2>
+              <h2>
+                Orders, last 7 days
+              </h2>
             </div>
+
             <div class="admin-panel-body">
-              <ul class="recent-list" id="recent-appointments"></ul>
+
+              <div
+                class="chart-bars"
+                id="chart-bars"
+              ></div>
+
             </div>
+
           </div>
+
+
+          <div class="admin-panel reveal">
+
+            <div class="admin-panel-head">
+              <h2>
+                Appointment requests
+              </h2>
+            </div>
+
+            <div class="admin-panel-body">
+
+              <ul
+                class="recent-list"
+                id="recent-appointments"
+              ></ul>
+
+            </div>
+
+          </div>
+
         </div>
 
+
+        <!-- RECENT ORDERS -->
         <div class="admin-panel reveal mt-l">
+
           <div class="admin-panel-head">
-            <h2>Recent orders</h2>
-            <a href="orders.html" class="btn btn-secondary btn-sm">View all</a>
+
+            <h2>
+              Recent orders
+            </h2>
+
+            <a
+              href="orders.html"
+              class="btn btn-secondary btn-sm"
+            >
+              View all
+            </a>
+
           </div>
+
+
           <div class="table-scroll">
-            <table class="admin-table" id="recent-orders-table">
+
+            <table
+              class="admin-table"
+              id="recent-orders-table"
+            >
+
               <thead>
+
                 <tr>
                   <th>Order ID</th>
                   <th>Customer</th>
@@ -139,20 +273,29 @@
                   <th>Status</th>
                   <th>Date</th>
                 </tr>
+
               </thead>
+
               <tbody></tbody>
+
             </table>
+
           </div>
+
         </div>
 
       </div>
+
     </div>
+
   </div>
+
 
   <script src="../js/main.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/admin.js"></script>
   <script src="../js/admin-dashboard.js"></script>
+
 </body>
 
 </html>

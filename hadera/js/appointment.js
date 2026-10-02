@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     'phone',
     'service',
     'date',
-    'time',
+    'time'
   ];
 
   function validate() {
     let valid = true;
 
-    requiredFields.forEach(name => {
+    requiredFields.forEach((name) => {
       const input = form.elements[name];
 
       if (!input) return;
@@ -35,20 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (name === 'phone' && ok) {
-        ok = input.value.trim().replace(/\D/g, '').length >= 10;
+        ok =
+          input.value
+            .trim()
+            .replace(/\D/g, '')
+            .length >= 10;
       }
 
       if (field) {
         field.classList.toggle('error', !ok);
       }
 
-      if (!ok) valid = false;
+      if (!ok) {
+        valid = false;
+      }
     });
 
     return valid;
   }
 
-  requiredFields.forEach(name => {
+  requiredFields.forEach((name) => {
     const input = form.elements[name];
 
     if (input) {
@@ -56,20 +62,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  form.addEventListener('submit', async e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!validate()) {
-      toast('Please fix the highlighted fields.', 'error');
+      toast(
+        'Please fix the highlighted fields.',
+        'error'
+      );
       return;
     }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending request…';
 
-    const data = Object.fromEntries(
-      new FormData(form).entries()
-    );
+    /*
+     * Build the payload using the exact field names
+     * expected by the HADÉRA backend.
+     */
+    const data = {
+      name: form.elements.fullName.value.trim(),
+      email: form.elements.email.value.trim(),
+      phone: form.elements.phone.value.trim(),
+      service: form.elements.service.value.trim(),
+      date: form.elements.date.value,
+      time: form.elements.time.value,
+      message: form.elements.message.value.trim()
+    };
 
     try {
       const result = await createAppointment(data);
@@ -80,13 +99,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const reference =
         result.appointmentId ||
         result.appointment?.id ||
-        result.id;
+        result.appointment?._id ||
+        result.id ||
+        result._id;
 
       document.getElementById('apt-ref').textContent =
         reference || 'Submitted';
+
     } catch (err) {
+      console.error(
+        'Appointment submission failed:',
+        err
+      );
+
       toast(
-        err.message || 'Something went wrong. Please try again.',
+        err.message ||
+        'Something went wrong. Please try again.',
         'error'
       );
 

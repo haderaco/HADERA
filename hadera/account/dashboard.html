@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Account — HADÉRA</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .account-dashboard {
+            padding: 3rem 0 5rem;
+        }
+
+        .account-heading {
+            margin-bottom: 2rem;
+        }
+
+        .account-heading h1 {
+            margin-bottom: 0.4rem;
+        }
+
+        .account-heading p {
+            color: var(--color-ink-soft);
+            margin: 0;
+        }
+
+        .account-layout {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .account-nav {
+            position: sticky;
+            top: 6rem;
+            display: grid;
+            gap: 0.35rem;
+        }
+
+        .account-nav button {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--color-ink-soft);
+            text-align: left;
+            padding: 0.75rem 0.9rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .account-nav button:hover,
+        .account-nav button.active {
+            background: var(--color-accent-soft);
+            color: var(--color-accent-ink);
+        }
+
+        .account-panel {
+            background: var(--color-surface);
+            border: 1px solid var(--color-line);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .account-panel+.account-panel {
+            margin-top: 1.25rem;
+        }
+
+        .account-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .account-panel-head h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .account-welcome {
+            background: var(--color-accent-soft);
+            border-color: transparent;
+        }
+
+        .account-welcome h2 {
+            margin-bottom: 0.4rem;
+        }
+
+        .account-welcome p {
+            margin: 0;
+            color: var(--color-ink-soft);
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .profile-form .field-row {
+            margin-bottom: 0;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        .account-message {
+            display: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+
+        .account-message.show {
+            display: block;
+        }
+
+        .account-message.success {
+            background: #eef8f1;
+            color: #2d6843;
+            border: 1px solid #cce5d4;
+        }
+
+        .account-message.error {
+            background: #fdf0f0;
+            color: #9b2c2c;
+            border: 1px solid #efcaca;
+        }
+
+        .orders-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .orders-table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 0.9rem 0.75rem;
+            border-bottom: 1px solid var(--color-line);
+            text-align: left;
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+
+        .orders-table th {
+            color: var(--color-ink-faint);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .order-status {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.3rem 0.6rem;
+            background: var(--color-accent-soft);
+            color: var(--color-accent-ink);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--color-ink-soft);
+        }
+
+        .loading-state {
+            color: var(--color-ink-faint);
+        }
+
+        @media (max-width: 800px) {
+            .account-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .account-nav {
+                position: static;
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 0.25rem;
+            }
+
+            .account-nav button {
+                width: auto;
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .account-dashboard {
+                padding-top: 2rem;
+            }
+
+            .account-panel {
+                padding: 1.15rem;
+            }
+
+            .profile-actions .btn {
+                width: 100%;
+            }
+
+            .account-panel-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="site-header"></div>
+
+    <main class="account-dashboard">
+
+        <div class="container">
+
+            <div class="account-heading">
+                <h1>My account</h1>
+                <p>
+                    Manage your profile and view your HADÉRA orders.
+                </p>
+            </div>
+
+            <div class="account-layout">
+
+                <aside class="account-nav">
+
+                    <button type="button" class="active" data-section="overview">
+                        Overview
+                    </button>
+
+                    <button type="button" data-section="orders">
+                        My orders
+                    </button>
+
+                    <button type="button" data-section="profile">
+                        Profile
+                    </button>
+
+                    <button type="button" id="logout-button">
+                        Log out
+                    </button>
+
+                </aside>
+
+                <section>
+
+                    <div id="account-message" class="account-message"></div>
+
+                    <div class="account-panel account-welcome" id="overview-section">
+                        <h2>
+                            Welcome,
+                            <span id="welcome-name">
+                                Customer
+                            </span>
+                        </h2>
+
+                        <p>
+                            Your HADÉRA account is ready.
+                            You can view your orders or update
+                            your profile from here.
+                        </p>
+                    </div>
+
+                    <div class="account-panel" id="orders-section" style="display:none;">
+
+                        <div class="account-panel-head">
+                            <h2>My orders</h2>
+                        </div>
+
+                        <div id="orders-container" class="orders-table-wrap">
+                            <div class="empty-state loading-state">
+                                Loading orders...
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="account-panel" id="profile-section" style="display:none;">
+
+                        <div class="account-panel-head">
+                            <h2>Profile</h2>
+                        </div>
+
+                        <form id="profile-form" class="profile-form">
+
+                            <div class="field">
+                                <label for="profile-name">
+                                    Full name
+                                </label>
+
+                                <input id="profile-name" name="name" type="text" required>
+                            </div>
+
+                            <div class="field">
+                                <label for="profile-email">
+                                    Email
+                                </label>
+
+                                <input id="profile-email" type="email" disabled>
+                            </div>
+
+                            <div class="field-row">
+
+                                <div class="field">
+                                    <label for="profile-phone">
+                                        Phone
+                                    </label>
+
+                                    <input id="profile-phone" name="phone" type="tel">
+                                </div>
+
+                                <div class="field">
+                                    <label for="profile-city">
+                                        City
+                                    </label>
+
+                                    <input id="profile-city" name="city" type="text">
+                                </div>
+
+                            </div>
+
+                            <div class="field">
+                                <label for="profile-state">
+                                    State
+                                </label>
+
+                                <input id="profile-state" name="state" type="text">
+                            </div>
+
+                            <div class="field">
+                                <label for="profile-address">
+                                    Address
+                                </label>
+
+                                <textarea id="profile-address" name="address" rows="4"></textarea>
+                            </div>
+
+                            <div class="profile-actions">
+                                <button type="submit" class="btn btn-primary" id="save-profile">
+                                    Save changes
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/customer-api.js"></script>
+
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            async () => {
+
+                const authenticated =
+                    await requireCustomerSession();
+
+                if (!authenticated) {
+                    return;
+                }
+
+                const welcomeName =
+                    document.getElementById(
+                        'welcome-name'
+                    );
+
+                const message =
+                    document.getElementById(
+                        'account-message'
+                    );
+
+                const profileForm =
+                    document.getElementById(
+                        'profile-form'
+                    );
+
+                const saveButton =
+                    document.getElementById(
+                        'save-profile'
+                    );
+
+                const ordersContainer =
+                    document.getElementById(
+                        'orders-container'
+                    );
+
+                const customer =
+                    getStoredCustomer();
+
+                function showMessage(
+                    text,
+                    type = 'success'
+                ) {
+                    message.textContent = text;
+
+                    message.className =
+                        `account-message show ${type}`;
+
+                    window.setTimeout(
+                        () => {
+                            message.className =
+                                'account-message';
+                        },
+                        3500
+                    );
+                }
+
+                function populateProfile(
+                    customerData
+                ) {
+                    if (!customerData) return;
+
+                    welcomeName.textContent =
+                        customerData.name ||
+                        'Customer';
+
+                    document.getElementById(
+                        'profile-name'
+                    ).value =
+                        customerData.name || '';
+
+                    document.getElementById(
+                        'profile-email'
+                    ).value =
+                        customerData.email || '';
+
+                    document.getElementById(
+                        'profile-phone'
+                    ).value =
+                        customerData.phone || '';
+
+                    document.getElementById(
+                        'profile-city'
+                    ).value =
+                        customerData.city || '';
+
+                    document.getElementById(
+                        'profile-state'
+                    ).value =
+                        customerData.state || '';
+
+                    document.getElementById(
+                        'profile-address'
+                    ).value =
+                        customerData.address || '';
+                }
+
+                populateProfile(customer);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Refresh customer from backend
+                |--------------------------------------------------------------------------
+                */
+
+                try {
+                    const result =
+                        await getCurrentCustomer();
+
+                    if (result.customer) {
+                        populateProfile(
+                            result.customer
+                        );
+                    }
+                } catch (error) {
+                    showMessage(
+                        error.message ||
+                        'Unable to load your account.',
+                        'error'
+                    );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Navigation
+                |--------------------------------------------------------------------------
+                */
+
+                const navButtons =
+                    document.querySelectorAll(
+                        '.account-nav button[data-section]'
+                    );
+
+                const sections = {
+                    overview:
+                        document.getElementById(
+                            'overview-section'
+                        ),
+
+                    orders:
+                        document.getElementById(
+                            'orders-section'
+                        ),
+
+                    profile:
+                        document.getElementById(
+                            'profile-section'
+                        )
+                };
+
+                navButtons.forEach(button => {
+                    button.addEventListener(
+                        'click',
+                        async () => {
+
+                            navButtons.forEach(
+                                item =>
+                                    item.classList.remove(
+                                        'active'
+                                    )
+                            );
+
+                            button.classList.add(
+                                'active'
+                            );
+
+                            Object.values(
+                                sections
+                            ).forEach(section => {
+                                section.style.display =
+                                    'none';
+                            });
+
+                            const section =
+                                button.dataset.section;
+
+                            sections[
+                                section
+                            ].style.display = 'block';
+
+                            if (
+                                section === 'orders'
+                            ) {
+                                await loadOrders();
+                            }
+                        }
+                    );
+                });
+
+                /*
+                |--------------------------------------------------------------------------
+                | Orders
+                |--------------------------------------------------------------------------
+                */
+
+                async function loadOrders() {
+                    ordersContainer.innerHTML = `
+            <div class="empty-state loading-state">
+              Loading orders...
+            </div>
+          `;
+
+                    try {
+                        const orders =
+                            await getCustomerOrders();
+
+                        if (!orders.length) {
+                            ordersContainer.innerHTML = `
+                <div class="empty-state">
+                  You haven't placed any orders yet.
+                </div>
+              `;
+
+                            return;
+                        }
+
+                        ordersContainer.innerHTML = `
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  ${orders.map(order => `
+                    <tr>
+
+                      <td>
+                        ${escapeHTML(
+                            order.orderId || '—'
+                        )}
+                      </td>
+
+                      <td>
+                        ${escapeHTML(
+                            order.product?.name ||
+                            '—'
+                        )}
+                      </td>
+
+                      <td>
+                        ₦${Number(
+                            order.amount || 0
+                        ).toLocaleString('en-NG')}
+                      </td>
+
+                      <td>
+                        ${escapeHTML(
+                            formatStatus(
+                                order.paymentStatus
+                            )
+                        )}
+                      </td>
+
+                      <td>
+                        <span class="order-status">
+                          ${escapeHTML(
+                            formatStatus(
+                                order.orderStatus
+                            )
+                        )}
+                        </span>
+                      </td>
+
+                      <td>
+                        ${order.createdAt
+                                ? new Date(
+                                    order.createdAt
+                                ).toLocaleDateString(
+                                    'en-NG'
+                                )
+                                : '—'
+                            }
+                      </td>
+
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `;
+                    } catch (error) {
+                        ordersContainer.innerHTML = `
+              <div class="empty-state">
+                ${escapeHTML(
+                            error.message ||
+                            'Unable to load your orders.'
+                        )}
+              </div>
+            `;
+                    }
+                }
+
+                function formatStatus(
+                    value
+                ) {
+                    return String(
+                        value || ''
+                    )
+                        .replace(/[-_]/g, ' ')
+                        .replace(
+                            /\b\w/g,
+                            char =>
+                                char.toUpperCase()
+                        );
+                }
+
+                function escapeHTML(value) {
+                    return String(
+                        value ?? ''
+                    )
+                        .replace(
+                            /&/g,
+                            '&amp;'
+                        )
+                        .replace(
+                            /</g,
+                            '&lt;'
+                        )
+                        .replace(
+                            />/g,
+                            '&gt;'
+                        )
+                        .replace(
+                            /"/g,
+                            '&quot;'
+                        )
+                        .replace(
+                            /'/g,
+                            '&#039;'
+                        );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Profile update
+                |--------------------------------------------------------------------------
+                */
+
+                profileForm.addEventListener(
+                    'submit',
+                    async event => {
+                        event.preventDefault();
+
+                        saveButton.disabled = true;
+                        saveButton.textContent =
+                            'Saving...';
+
+                        try {
+                            const formData =
+                                new FormData(
+                                    profileForm
+                                );
+
+                            const result =
+                                await updateCustomerProfile(
+                                    {
+                                        name:
+                                            formData.get(
+                                                'name'
+                                            ).trim(),
+
+                                        phone:
+                                            formData.get(
+                                                'phone'
+                                            ).trim(),
+
+                                        city:
+                                            formData.get(
+                                                'city'
+                                            ).trim(),
+
+                                        state:
+                                            formData.get(
+                                                'state'
+                                            ).trim(),
+
+                                        address:
+                                            formData.get(
+                                                'address'
+                                            ).trim()
+                                    }
+                                );
+
+                            populateProfile(
+                                result.customer
+                            );
+
+                            showMessage(
+                                'Profile updated successfully.'
+                            );
+
+                        } catch (error) {
+                            showMessage(
+                                error.message ||
+                                'Unable to update your profile.',
+                                'error'
+                            );
+                        } finally {
+                            saveButton.disabled = false;
+                            saveButton.textContent =
+                                'Save changes';
+                        }
+                    }
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Logout
+                |--------------------------------------------------------------------------
+                */
+
+                document
+                    .getElementById(
+                        'logout-button'
+                    )
+                    .addEventListener(
+                        'click',
+                        async () => {
+
+                            const button =
+                                document.getElementById(
+                                    'logout-button'
+                                );
+
+                            button.disabled = true;
+                            button.textContent =
+                                'Logging out...';
+
+                            await logoutCustomer();
+
+                            window.location.replace(
+                                'login.html'
+                            );
+                        }
+                    );
+            }
+        );
+    </script>
+
+</body>
+
+</html>

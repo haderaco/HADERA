@@ -1,46 +1,46 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    if (!requireAdminSession()) return;
+  if (!requireAdminSession()) return;
 
-    renderAdminShell('Categories');
-    HADERA.initReveal();
+  renderAdminShell('Categories');
+  HADERA.initReveal();
 
-    const grid = document.getElementById('cat-grid');
-    const backdrop =
-        document.getElementById('cat-modal-backdrop');
-    const modal =
-        document.getElementById('cat-modal');
-    const form =
-        document.getElementById('cat-form');
+  const grid = document.getElementById('cat-grid');
+  const backdrop =
+    document.getElementById('cat-modal-backdrop');
+  const modal =
+    document.getElementById('cat-modal');
+  const form =
+    document.getElementById('cat-form');
 
-    const modalTitle =
-        document.getElementById('cat-modal-title');
+  const modalTitle =
+    document.getElementById('cat-modal-title');
 
-    let categories = [];
-    let editingId = null;
+  let categories = [];
+  let editingId = null;
 
-    async function loadCategories() {
-        grid.innerHTML = `
+  async function loadCategories() {
+    grid.innerHTML = `
       <div class="state-msg">
         <p>Loading categories…</p>
       </div>
     `;
 
-        try {
-            categories = await getCategories();
-            render();
-        } catch (error) {
-            grid.innerHTML = `
+    try {
+      categories = await getCategories();
+      render();
+    } catch (error) {
+      grid.innerHTML = `
         <div class="state-msg">
           <p>
             ${error.message || 'Unable to load categories.'}
           </p>
         </div>
       `;
-        }
     }
+  }
 
-    function render() {
-        grid.innerHTML = categories.map(category => `
+  function render() {
+    grid.innerHTML = categories.map(category => `
       <div class="cat-card">
         <img
           src="${category.image || category.imageUrl || ''}"
@@ -81,161 +81,161 @@ document.addEventListener('DOMContentLoaded', async () => {
         <span>Add category</span>
       </div>
     `;
+  }
+
+  function openModal() {
+    backdrop.classList.add('open');
+    modal.classList.add('open');
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    modal.classList.remove('open');
+    form.reset();
+    editingId = null;
+  }
+
+  document
+    .getElementById('cat-modal-close')
+    .addEventListener('click', closeModal);
+
+  backdrop.addEventListener('click', closeModal);
+
+  grid.addEventListener('click', async e => {
+    if (e.target.closest('#add-cat-trigger')) {
+      editingId = null;
+      modalTitle.textContent = 'Add category';
+      form.reset();
+      openModal();
+      return;
     }
 
-    function openModal() {
-        backdrop.classList.add('open');
-        modal.classList.add('open');
+    const editBtn =
+      e.target.closest('.edit-cat-btn');
+
+    if (editBtn) {
+      const category = categories.find(
+        item =>
+          String(item.id) ===
+          String(editBtn.dataset.id)
+      );
+
+      if (!category) return;
+
+      editingId = category.id;
+
+      modalTitle.textContent = 'Edit category';
+
+      form.name.value = category.name || '';
+      form.description.value =
+        category.description || '';
+
+      openModal();
+      return;
     }
 
-    function closeModal() {
-        backdrop.classList.remove('open');
-        modal.classList.remove('open');
-        form.reset();
-        editingId = null;
+    const deleteBtn =
+      e.target.closest('.delete-cat-btn');
+
+    if (deleteBtn) {
+      const id = deleteBtn.dataset.id;
+
+      if (!confirm('Delete this category?')) {
+        return;
+      }
+
+      deleteBtn.disabled = true;
+
+      try {
+        await deleteCategory(id);
+
+        categories = categories.filter(
+          category =>
+            String(category.id) !== String(id)
+        );
+
+        render();
+
+        HADERA.toast(
+          'Category deleted.',
+          'success'
+        );
+      } catch (error) {
+        HADERA.toast(
+          error.message ||
+          'Unable to delete category.',
+          'error'
+        );
+
+        deleteBtn.disabled = false;
+      }
     }
+  });
 
-    document
-        .getElementById('cat-modal-close')
-        .addEventListener('click', closeModal);
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
 
-    backdrop.addEventListener('click', closeModal);
+    const submitBtn =
+      form.querySelector('button[type="submit"]');
 
-    grid.addEventListener('click', async e => {
-        if (e.target.closest('#add-cat-trigger')) {
-            editingId = null;
-            modalTitle.textContent = 'Add category';
-            form.reset();
-            openModal();
-            return;
-        }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving…';
 
-        const editBtn =
-            e.target.closest('.edit-cat-btn');
+    try {
+      const formData = new FormData();
 
-        if (editBtn) {
-            const category = categories.find(
-                item =>
-                    String(item.id) ===
-                    String(editBtn.dataset.id)
-            );
+      formData.append(
+        'name',
+        form.name.value.trim()
+      );
 
-            if (!category) return;
+      formData.append(
+        'description',
+        form.description.value.trim()
+      );
 
-            editingId = category.id;
+      const imageInput =
+        document.getElementById('cf-image');
 
-            modalTitle.textContent = 'Edit category';
+      if (imageInput?.files?.length) {
+        formData.append(
+          'image',
+          imageInput.files[0]
+        );
+      }
 
-            form.name.value = category.name || '';
-            form.description.value =
-                category.description || '';
+      if (editingId) {
+        await updateCategory(
+          editingId,
+          formData
+        );
 
-            openModal();
-            return;
-        }
+        HADERA.toast(
+          'Category updated.',
+          'success'
+        );
+      } else {
+        await createCategory(formData);
 
-        const deleteBtn =
-            e.target.closest('.delete-cat-btn');
+        HADERA.toast(
+          'Category added.',
+          'success'
+        );
+      }
 
-        if (deleteBtn) {
-            const id = deleteBtn.dataset.id;
+      await loadCategories();
+      closeModal();
+    } catch (error) {
+      HADERA.toast(
+        error.message ||
+        'Unable to save category.',
+        'error'
+      );
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save category';
+    }
+  });
 
-            if (!confirm('Delete this category?')) {
-                return;
-            }
-
-            deleteBtn.disabled = true;
-
-            try {
-                await deleteCategory(id);
-
-                categories = categories.filter(
-                    category =>
-                        String(category.id) !== String(id)
-                );
-
-                render();
-
-                HADERA.toast(
-                    'Category deleted.',
-                    'success'
-                );
-            } catch (error) {
-                HADERA.toast(
-                    error.message ||
-                    'Unable to delete category.',
-                    'error'
-                );
-
-                deleteBtn.disabled = false;
-            }
-        }
-    });
-
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-
-        const submitBtn =
-            form.querySelector('button[type="submit"]');
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Saving…';
-
-        try {
-            const formData = new FormData();
-
-            formData.append(
-                'name',
-                form.name.value.trim()
-            );
-
-            formData.append(
-                'description',
-                form.description.value.trim()
-            );
-
-            const imageInput =
-                document.getElementById('cf-image');
-
-            if (imageInput?.files?.length) {
-                formData.append(
-                    'image',
-                    imageInput.files[0]
-                );
-            }
-
-            if (editingId) {
-                await updateCategory(
-                    editingId,
-                    formData
-                );
-
-                HADERA.toast(
-                    'Category updated.',
-                    'success'
-                );
-            } else {
-                await createCategory(formData);
-
-                HADERA.toast(
-                    'Category added.',
-                    'success'
-                );
-            }
-
-            await loadCategories();
-            closeModal();
-        } catch (error) {
-            HADERA.toast(
-                error.message ||
-                'Unable to save category.',
-                'error'
-            );
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Save category';
-        }
-    });
-
-    await loadCategories();
+  await loadCategories();
 });

@@ -4,10 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Order received — HADÉRA</title>
+  <title>Order status — HADÉRA</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="css/style.css">
+
   <style>
     .success-wrap {
       max-width: 560px;
@@ -26,6 +31,11 @@
       margin: 0 auto 1.5rem;
     }
 
+    .success-icon.failed {
+      background: #fbe9e9;
+      color: #a62b2b;
+    }
+
     .success-card {
       text-align: left;
       background: var(--color-bg-raised);
@@ -38,6 +48,7 @@
     .success-row {
       display: flex;
       justify-content: space-between;
+      gap: 1rem;
       padding: 0.6rem 0;
       border-bottom: 1px solid var(--color-line);
       font-size: 0.92rem;
@@ -51,6 +62,11 @@
       color: var(--color-ink-soft);
     }
 
+    .success-row span:last-child {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
     .status-pill {
       padding: 0.2rem 0.6rem;
       border-radius: 100px;
@@ -58,6 +74,34 @@
       font-weight: 600;
       background: var(--color-accent-soft);
       color: var(--color-accent-ink);
+    }
+
+    .status-pill.failed {
+      background: #fbe9e9;
+      color: #a62b2b;
+    }
+
+    .failure-message {
+      color: var(--color-ink-soft);
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .success-row {
+        align-items: flex-start;
+      }
+
+      .success-row span:last-child {
+        max-width: 60%;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+      }
+
+      .hero-ctas .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -69,27 +113,49 @@
   <main>
     <div class="section">
       <div class="container success-wrap">
-        <div class="success-icon">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+
+        <!-- Status icon -->
+        <div class="success-icon" id="status-icon">
+          <svg id="success-svg" width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
         </div>
-        <span class="eyebrow">Step 3 of 3</span>
-        <h1 style="font-size:var(--step-3);margin-top:0.6rem">Order received</h1>
-        <p style="color:var(--color-ink-soft);margin-top:0.8rem">Thank you — our team will reach out shortly to confirm
-          the details of your order.</p>
 
+        <span class="eyebrow" id="status-eyebrow">
+          Step 3 of 3
+        </span>
+
+        <h1 id="status-title" style="font-size:var(--step-3);margin-top:0.6rem">
+          Order received
+        </h1>
+
+        <p id="status-message" style="color:var(--color-ink-soft);margin-top:0.8rem">
+          Thank you — our team will reach out shortly to confirm the details of your order.
+        </p>
+
+        <!-- Order details -->
         <div class="success-card" id="order-details">
+
           <div class="skeleton" style="height:16px;margin-bottom:12px"></div>
+
           <div class="skeleton" style="height:16px;margin-bottom:12px"></div>
+
           <div class="skeleton" style="height:16px"></div>
+
         </div>
 
-        <div class="hero-ctas" style="justify-content:center;margin-top:2rem">
-          <a href="products.html" class="btn btn-primary">Continue shopping</a>
-          <a href="index.html" class="btn btn-secondary">Back to home</a>
+        <!-- Buttons -->
+        <div class="hero-ctas" id="status-actions" style="justify-content:center;margin-top:2rem">
+          <a href="products.html" class="btn btn-primary">
+            Continue shopping
+          </a>
+
+          <a href="index.html" class="btn btn-secondary">
+            Back to home
+          </a>
         </div>
+
       </div>
     </div>
   </main>
@@ -97,30 +163,276 @@
   <div id="site-footer"></div>
 
   <script src="js/main.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const orderId = params.get('order');
-      let saved = null;
-      try { saved = JSON.parse(sessionStorage.getItem('hadera_last_order') || 'null'); } catch (e) { }
 
-      const el = HADERA.qs('#order-details');
-      if (saved && saved.orderId === orderId) {
-        el.innerHTML = `
-        <div class="success-row"><span>Order reference</span><span><strong>${saved.orderId}</strong></span></div>
-        <div class="success-row"><span>Product</span><span>${saved.product}</span></div>
-        <div class="success-row"><span>Amount</span><span>${HADERA.formatNaira(saved.amount)}</span></div>
-        <div class="success-row"><span>Customer</span><span>${saved.customerName}</span></div>
-        <div class="success-row"><span>Payment status</span><span class="status-pill">Pending</span></div>
-      `;
-      } else {
-        el.innerHTML = `
-        <div class="success-row"><span>Order reference</span><span><strong>${orderId || '—'}</strong></span></div>
-        <div class="success-row"><span>Payment status</span><span class="status-pill">Pending</span></div>
-      `;
+      const params =
+        new URLSearchParams(window.location.search);
+
+      /*
+       * Your backend callback sends:
+       *
+       * ?status=success&orderId=...
+       *
+       * or
+       *
+       * ?status=failed&orderId=...
+       */
+
+      const status =
+        (params.get('status') || '').toLowerCase();
+
+      const orderId =
+        params.get('orderId') ||
+        params.get('order') ||
+        '';
+
+      let saved = null;
+
+      try {
+        saved = JSON.parse(
+          sessionStorage.getItem('hadera_last_order') || 'null'
+        );
+      } catch (error) {
+        saved = null;
       }
+
+      const icon =
+        HADERA.qs('#status-icon');
+
+      const title =
+        HADERA.qs('#status-title');
+
+      const eyebrow =
+        HADERA.qs('#status-eyebrow');
+
+      const message =
+        HADERA.qs('#status-message');
+
+      const details =
+        HADERA.qs('#order-details');
+
+      const successSvg =
+        HADERA.qs('#success-svg');
+
+      /*
+       * --------------------------------------------------
+       * FAILED PAYMENT / ORDER
+       * --------------------------------------------------
+       */
+
+      if (status === 'failed') {
+
+        document.title =
+          'Order failed — HADÉRA';
+
+        icon.classList.add('failed');
+
+        eyebrow.textContent =
+          'Order not completed';
+
+        title.textContent =
+          'Order placement failed';
+
+        message.textContent =
+          'We could not complete your order payment. Your order has not been confirmed. Please try again.';
+
+        /*
+         * Change check icon to X
+         */
+        successSvg.innerHTML = `
+      <path
+        d="M7 7l10 10M17 7L7 17"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+    `;
+
+        details.innerHTML = `
+      <div class="success-row">
+        <span>Order reference</span>
+        <span>
+          <strong>${escapeHtml(orderId || '—')}</strong>
+        </span>
+      </div>
+
+      <div class="success-row">
+        <span>Payment status</span>
+        <span class="status-pill failed">
+          Failed
+        </span>
+      </div>
+    `;
+
+        /*
+         * Change the primary action.
+         */
+        const actions =
+          HADERA.qs('#status-actions');
+
+        actions.innerHTML = `
+      <a
+        href="products.html"
+        class="btn btn-primary"
+      >
+        Try again
+      </a>
+
+      <a
+        href="index.html"
+        class="btn btn-secondary"
+      >
+        Back to home
+      </a>
+    `;
+
+        return;
+      }
+
+      /*
+       * --------------------------------------------------
+       * SUCCESSFUL PAYMENT
+       * --------------------------------------------------
+       */
+
+      if (status === 'success') {
+
+        document.title =
+          'Order received — HADÉRA';
+
+        eyebrow.textContent =
+          'Step 3 of 3';
+
+        title.textContent =
+          'Order received';
+
+        message.textContent =
+          'Thank you — your payment was successful and your order has been received. Our team will reach out shortly to confirm the details of your order.';
+
+        if (saved && saved.orderId === orderId) {
+
+          details.innerHTML = `
+        <div class="success-row">
+          <span>Order reference</span>
+          <span>
+            <strong>
+              ${escapeHtml(saved.orderId)}
+            </strong>
+          </span>
+        </div>
+
+        <div class="success-row">
+          <span>Product</span>
+          <span>
+            ${escapeHtml(saved.product || '—')}
+          </span>
+        </div>
+
+        <div class="success-row">
+          <span>Amount</span>
+          <span>
+            ${HADERA.formatNaira(saved.amount)}
+          </span>
+        </div>
+
+        <div class="success-row">
+          <span>Customer</span>
+          <span>
+            ${escapeHtml(saved.customerName || '—')}
+          </span>
+        </div>
+
+        <div class="success-row">
+          <span>Payment status</span>
+          <span class="status-pill">
+            Successful
+          </span>
+        </div>
+      `;
+
+        } else {
+
+          details.innerHTML = `
+        <div class="success-row">
+          <span>Order reference</span>
+          <span>
+            <strong>
+              ${escapeHtml(orderId || '—')}
+            </strong>
+          </span>
+        </div>
+
+        <div class="success-row">
+          <span>Payment status</span>
+          <span class="status-pill">
+            Successful
+          </span>
+        </div>
+      `;
+        }
+
+        return;
+      }
+
+      /*
+       * --------------------------------------------------
+       * UNKNOWN / DIRECT VISIT
+       * --------------------------------------------------
+       *
+       * If somebody simply opens success.html without
+       * coming through the payment callback, don't falsely
+       * tell them that their order succeeded.
+       */
+
+      document.title =
+        'Order status — HADÉRA';
+
+      eyebrow.textContent =
+        'Order status';
+
+      title.textContent =
+        'Order status unavailable';
+
+      message.textContent =
+        'We could not determine the payment status for this order. Please check your order reference or contact HADÉRA.';
+
+      details.innerHTML = `
+    <div class="success-row">
+      <span>Order reference</span>
+      <span>
+        <strong>
+          ${escapeHtml(orderId || '—')}
+        </strong>
+      </span>
+    </div>
+
+    <div class="success-row">
+      <span>Payment status</span>
+      <span class="status-pill failed">
+        Unknown
+      </span>
+    </div>
+  `;
     });
+
+
+    /*
+     * Small HTML escaping helper.
+     * Prevents product/customer/order data from being
+     * inserted into the page as raw HTML.
+     */
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
   </script>
+
 </body>
 
 </html>
